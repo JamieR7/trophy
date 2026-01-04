@@ -13,13 +13,13 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #004587 0%, #002d5a 100%);
             min-height: 100vh;
             padding: 20px;
         }
 
         .quiz-container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -30,13 +30,35 @@
         .trophy-section {
             margin-bottom: 40px;
             padding: 30px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
             border-radius: 15px;
+            position: relative;
+        }
+
+        .download-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #fbba07;
+            color: #004587;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .download-btn:hover {
+            background: #e5a906;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(251, 186, 7, 0.4);
         }
 
         .trophy-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            grid-template-columns: repeat(12, 1fr);
             gap: 15px;
             margin-top: 20px;
         }
@@ -46,7 +68,7 @@
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            padding: 12px;
+            padding: 12px 8px;
             background: white;
             border-radius: 12px;
             border: 3px solid #e0e0e0;
@@ -55,8 +77,8 @@
         }
 
         .trophy-item.unlocked {
-            border-color: #4CAF50;
-            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            border-color: #fbba07;
+            box-shadow: 0 4px 12px rgba(251, 186, 7, 0.3);
             transform: translateY(-2px);
         }
 
@@ -65,28 +87,29 @@
             filter: grayscale(100%);
         }
 
-        .trophy-emoji {
-            font-size: 36px;
-            line-height: 1;
+        .trophy-image {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
         }
 
         .trophy-number {
             font-weight: 600;
-            font-size: 16px;
-            color: #333;
+            font-size: 14px;
+            color: #004587;
         }
 
         .progress-text {
             text-align: center;
             margin-top: 20px;
             font-size: 18px;
-            color: #555;
+            color: #004587;
             font-weight: 500;
         }
 
         h1 {
             text-align: center;
-            color: #333;
+            color: #004587;
             margin-bottom: 10px;
             font-size: 32px;
         }
@@ -103,7 +126,7 @@
         }
 
         .question-number {
-            color: #667eea;
+            color: #004587;
             font-weight: 600;
             margin-bottom: 15px;
             font-size: 14px;
@@ -136,26 +159,27 @@
         }
 
         .option:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
+            border-color: #004587;
+            background: #f0f4f8;
             transform: translateX(5px);
         }
 
         .option.selected {
-            border-color: #667eea;
-            background: #667eea;
+            border-color: #004587;
+            background: #004587;
             color: white;
         }
 
         .option.correct {
-            border-color: #4CAF50;
-            background: #4CAF50;
-            color: white;
+            border-color: #fbba07;
+            background: #fbba07;
+            color: #004587;
+            font-weight: 600;
         }
 
         .option.incorrect {
-            border-color: #f44336;
-            background: #f44336;
+            border-color: #e73037;
+            background: #e73037;
             color: white;
         }
 
@@ -174,15 +198,15 @@
         }
 
         .feedback.correct {
-            background: #e8f5e9;
-            color: #2e7d32;
-            border: 2px solid #4CAF50;
+            background: #fff8e1;
+            color: #004587;
+            border: 2px solid #fbba07;
         }
 
         .feedback.incorrect {
             background: #ffebee;
             color: #c62828;
-            border: 2px solid #f44336;
+            border: 2px solid #e73037;
         }
 
         .btn {
@@ -198,13 +222,14 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #004587;
             color: white;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 20px rgba(0, 69, 135, 0.4);
+            background: #003670;
         }
 
         .btn-primary:disabled {
@@ -217,7 +242,7 @@
             text-align: center;
             font-size: 24px;
             margin: 20px 0;
-            color: #667eea;
+            color: #004587;
             font-weight: 600;
         }
 
@@ -228,7 +253,7 @@
 
         .final-score {
             font-size: 48px;
-            color: #667eea;
+            color: #004587;
             margin: 20px 0;
             font-weight: 700;
         }
@@ -252,8 +277,18 @@
 
         .btn-restart {
             margin-top: 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #004587;
             color: white;
+        }
+
+        .btn-restart:hover {
+            background: #003670;
+        }
+
+        @media (max-width: 1024px) {
+            .trophy-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
@@ -262,16 +297,17 @@
             }
             
             .trophy-grid {
-                grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+                grid-template-columns: repeat(4, 1fr);
                 gap: 10px;
             }
             
-            .trophy-emoji {
-                font-size: 28px;
+            .trophy-image {
+                width: 40px;
+                height: 40px;
             }
             
             .trophy-number {
-                font-size: 14px;
+                font-size: 12px;
             }
             
             h1 {
@@ -281,13 +317,20 @@
             .question-text {
                 font-size: 18px;
             }
+
+            .download-btn {
+                position: static;
+                margin-bottom: 20px;
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="quiz-container">
         <div class="trophy-section">
-            <h2 style="text-align: center; color: #333; margin-bottom: 10px;">🏆 Trophy Collection</h2>
+            <button class="download-btn" id="downloadBtn" onclick="downloadTrophies()">📥 Download Progress</button>
+            <h2 style="text-align: center; color: #004587; margin-bottom: 10px;">🏆 Trophy Collection</h2>
             <div class="trophy-grid" id="trophyGrid"></div>
             <p class="progress-text" id="progressText">Progress: 0 of 12 trophies unlocked</p>
         </div>
@@ -311,7 +354,7 @@
         
         <div id="resultsArea" style="display: none;">
             <div class="results-container">
-                <h2>Quiz Complete!</h2>
+                <h2 style="color: #004587;">Quiz Complete!</h2>
                 <div class="trophy-display" id="finalTrophy"></div>
                 <div class="final-score" id="finalScore"></div>
                 <div class="message" id="finalMessage"></div>
@@ -325,19 +368,22 @@
     
     <!-- Then quiz logic -->
     <script>
+        // Base URL for GitHub Pages
+        const baseUrl = 'https://jamier7.github.io/trophy/';
+        
         const trophies = [
-            { milestone: 1, emoji: "⚽", name: "FIFA World Cup" },
-            { milestone: 3, emoji: "🏈", name: "Calcutta Cup" },
-            { milestone: 5, emoji: "🏐", name: "FIVB World Championship Trophy" },
-            { milestone: 7, emoji: "🏏", name: "The Ashes" },
-            { milestone: 10, emoji: "🎱", name: "The Silver Lady" },
-            { milestone: 13, emoji: "⛵", name: "America's Cup" },
-            { milestone: 17, emoji: "🏀", name: "Larry O'Brien Trophy" },
-            { milestone: 21, emoji: "🎾", name: "Davis Cup" },
-            { milestone: 25, emoji: "⛳", name: "Ryder Cup" },
-            { milestone: 30, emoji: "🎾", name: "Venus Rosewater Dish" },
-            { milestone: 35, emoji: "🥇", name: "Olympic Gold Medal" },
-            { milestone: 40, emoji: "🚴", name: "Yellow Jersey" }
+            { milestone: 1, image: "Trophys/FIFA.png", name: "FIFA World Cup" },
+            { milestone: 3, image: "Trophys/Calcutta%20Cup.png", name: "Calcutta Cup" },
+            { milestone: 5, image: "Trophys/FIVB.png", name: "FIVB World Championship Trophy" },
+            { milestone: 7, image: "Trophys/The%20Ashes.png", name: "The Ashes" },
+            { milestone: 10, image: "Trophys/Snooker.png", name: "The Silver Lady" },
+            { milestone: 13, image: "Trophys/Americas%20cup.png", name: "America's Cup" },
+            { milestone: 17, image: "Trophys/Larry%20O'Brien.png", name: "Larry O'Brien Trophy" },
+            { milestone: 21, image: "Trophys/Davis%20Cup.png", name: "Davis Cup" },
+            { milestone: 25, image: "Trophys/Ryder%20Cup.png", name: "Ryder Cup" },
+            { milestone: 30, image: "Trophys/Venus%20Rosewater.png", name: "Venus Rosewater Dish" },
+            { milestone: 35, image: "Trophys/Olympic%20gold.png", name: "Olympic Gold Medal" },
+            { milestone: 40, image: "Trophys/Yellow%20jersey.png", name: "Yellow Jersey" }
         ];
 
         let currentQuestion = 0;
@@ -370,7 +416,7 @@
                 trophyItem.className = `trophy-item ${isUnlocked ? 'unlocked' : 'locked'}`;
                 trophyItem.title = trophy.name;
                 trophyItem.innerHTML = `
-                    <div class="trophy-emoji">${trophy.emoji}</div>
+                    <img src="${trophy.image}" alt="${trophy.name}" class="trophy-image">
                     <div class="trophy-number">${trophy.milestone}</div>
                 `;
                 trophyGrid.appendChild(trophyItem);
@@ -379,6 +425,46 @@
             const unlockedCount = trophies.filter(t => score >= t.milestone).length;
             document.getElementById('progressText').textContent = 
                 `Progress: ${unlockedCount} of ${trophies.length} trophies unlocked`;
+        }
+
+        function downloadTrophies() {
+            const unlockedTrophies = trophies.filter(t => score >= t.milestone);
+            const lockedTrophies = trophies.filter(t => score < t.milestone);
+            
+            let content = "🏆 MY IB SPORTS SCIENCE TROPHY COLLECTION 🏆\n";
+            content += "=" .repeat(50) + "\n\n";
+            content += `Current Score: ${score}/40\n`;
+            content += `Trophies Unlocked: ${unlockedTrophies.length}/${trophies.length}\n\n`;
+            
+            content += "✅ UNLOCKED TROPHIES:\n";
+            content += "-".repeat(50) + "\n";
+            if (unlockedTrophies.length > 0) {
+                unlockedTrophies.forEach(trophy => {
+                    content += `🏆 ${trophy.name} (${trophy.milestone} correct answers)\n`;
+                });
+            } else {
+                content += "None yet - keep practicing!\n";
+            }
+            
+            content += "\n🔒 LOCKED TROPHIES:\n";
+            content += "-".repeat(50) + "\n";
+            lockedTrophies.forEach(trophy => {
+                const needed = trophy.milestone - score;
+                content += `🔒 ${trophy.name} (Need ${needed} more correct answer${needed === 1 ? '' : 's'})\n`;
+            });
+            
+            content += "\n" + "=".repeat(50) + "\n";
+            content += `Generated: ${new Date().toLocaleString()}\n`;
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `IB_Sports_Science_Trophies_${score}_points.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         function loadQuestion() {
