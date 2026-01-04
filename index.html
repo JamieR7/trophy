@@ -341,6 +341,7 @@
             transition: all 0.2s ease;
             text-decoration: none;
             text-align: center;
+            display: inline-block;
         }
 
         .btn-download:hover {
@@ -382,6 +383,10 @@
             .stats {
                 justify-content: center;
             }
+
+            .progress-track {
+                grid-template-columns: repeat(6, 1fr);
+            }
         }
     </style>
 </head>
@@ -417,6 +422,9 @@
     <script src="questions.js"></script>
 
     <script>
+        const GITHUB_USERNAME = 'JamieR7';
+        const GITHUB_REPO = 'trophy';
+
         let currentQuestionIndex = 0;
         let shuffledQuestions = [];
         let correct = 0;
@@ -425,18 +433,18 @@
         let answered = false;
         let selectedAnswer = -1;
         const trophySequence = [
-            { streak: 1, name: 'Venus Rosewater', file: 'Venus_Rosewater.png', emoji: '🎾' },
-            { streak: 3, name: 'Olympic Gold', file: 'Olympic_gold.png', emoji: '🥇' },
-            { streak: 5, name: 'Yellow Jersey', file: 'Yellow_jersey.png', emoji: '🟨' },
-            { streak: 7, name: 'Ryder Cup', file: 'Ryder_Cup.png', emoji: '⛳' },
-            { streak: 9, name: 'FIFA World Cup', file: 'FIFA.png', emoji: '⚽' },
-            { streak: 12, name: 'Calcutta Cup', file: 'Calcutta_Cup.png', emoji: '🏉' },
-            { streak: 15, name: 'FIVB World', file: 'FIVB.png', emoji: '🏐' },
+            { streak: 1, name: 'FIFA World Cup', file: 'FIFA.png', emoji: '⚽' },
+            { streak: 3, name: 'Calcutta Cup', file: 'Calcutta_Cup.png', emoji: '🏉' },
+            { streak: 5, name: 'FIVB World', file: 'FIVB.png', emoji: '🏐' },
+            { streak: 7, name: 'The Ashes', file: 'The_Ashes.png', emoji: '🏏' },
+            { streak: 9, name: 'Snooker', file: 'Snooker.png', emoji: '🎱' },
+            { streak: 12, name: 'Americas Cup', file: 'Americas_cup.png', emoji: '⛵' },
+            { streak: 15, name: 'Larry O\'Brien', file: 'Larry_OBrien.png', emoji: '🏀' },
             { streak: 20, name: 'Davis Cup', file: 'Davis_Cup.png', emoji: '🎾' },
-            { streak: 25, name: 'The Ashes', file: 'The_Ashes.png', emoji: '🏏' },
-            { streak: 30, name: 'Snooker', file: 'Snooker.png', emoji: '🎱' },
-            { streak: 40, name: 'Americas Cup', file: 'Americas_cup.png', emoji: '⛵' },
-            { streak: 50, name: 'Larry O\'Brien', file: 'Larry_OBrien.png', emoji: '🏀' }
+            { streak: 25, name: 'Ryder Cup', file: 'Ryder_Cup.png', emoji: '⛳' },
+            { streak: 30, name: 'Venus Rosewater', file: 'Venus_Rosewater.png', emoji: '🎾' },
+            { streak: 40, name: 'Olympic Gold', file: 'Olympic_gold.png', emoji: '🥇' },
+            { streak: 50, name: 'Yellow Jersey', file: 'Yellow_jersey.png', emoji: '🚴' }
         ];
 
         function shuffleArray(array) {
@@ -450,7 +458,32 @@
 
         function initializeQuiz() {
             shuffledQuestions = shuffleArray(allQuestions);
+            currentQuestionIndex = 0;
+            correct = 0;
+            total = 0;
+            streak = 0;
+            updateStats();
             loadQuestion();
+        }
+
+        function createProgressBar() {
+            let html = '<div class="progress-bar"><div class="progress-track">';
+            
+            trophySequence.forEach((trophy) => {
+                let cardClass = 'trophy-card locked';
+                
+                if (streak >= trophy.streak) {
+                    cardClass = 'trophy-card unlocked';
+                }
+                
+                html += `<div class="${cardClass}" title="${trophy.name}">${trophy.emoji}<div class="trophy-label">${trophy.streak}</div></div>`;
+            });
+            
+            html += '</div><div class="milestone-info">Progress: ';
+            const unlockedCount = trophySequence.filter(t => streak >= t.streak).length;
+            html += `${unlockedCount} of ${trophySequence.length} trophies unlocked</div></div>`;
+            
+            return html;
         }
 
         function loadQuestion() {
@@ -463,7 +496,9 @@
             selectedAnswer = -1;
             const q = shuffledQuestions[currentQuestionIndex];
 
-            let html = `
+            let html = createProgressBar();
+            
+            html += `
                 <div class="question-container">
                     <div class="question-number">Question ${currentQuestionIndex + 1} of ${shuffledQuestions.length}</div>
                     <div class="question-text">${q.q}</div>
@@ -548,10 +583,9 @@
 
         function showStreakMilestone() {
             const currentTrophy = trophySequence.find(t => t.streak === streak);
-            // TODO: Replace 'yourusername' with your actual GitHub username
-            const downloadUrl = `https://github.com/yourusername/yourrepo/raw/main/Trophys/${currentTrophy.file}`;
+            const downloadUrl = `https://github.com/${GITHUB_USERNAME}/${GITHUB_REPO}/raw/main/Trophys/${currentTrophy.file}`;
             
-            let downloadHTML = `<a href="${downloadUrl}" class="btn-download" download>⬇️ Download ${currentTrophy.name}</a>`;
+            let downloadHTML = `<a href="${downloadUrl}" class="btn-download" download="${currentTrophy.file}">⬇️ Download ${currentTrophy.name}</a>`;
 
             const progressHTML = createProgressBar();
 
@@ -565,30 +599,13 @@
                         <h3>🏆 Download Your Trophy</h3>
                         ${downloadHTML}
                     </div>
-                    <button class="btn btn-primary" onclick="continueLearning()" style="width: 100%; margin-top: var(--spacing-16);">Continue Quiz</button>
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="continueLearning()">Continue Quiz</button>
+                        <button class="btn btn-secondary" onclick="location.reload()">Start Over</button>
+                    </div>
                 </div>
             `;
             document.getElementById('quiz-content').innerHTML = html;
-        }
-
-        function createProgressBar() {
-            let html = '<div class="progress-bar"><div class="progress-track">';
-            
-            trophySequence.forEach((trophy) => {
-                let cardClass = 'trophy-card locked';
-                
-                if (streak >= trophy.streak) {
-                    cardClass = streak === trophy.streak ? 'trophy-card unlocked current' : 'trophy-card unlocked';
-                }
-                
-                html += `<div class="${cardClass}" title="${trophy.streak} streak: ${trophy.name}">${trophy.emoji}<div class="trophy-label">${trophy.streak}</div></div>`;
-            });
-            
-            html += '</div><div class="milestone-info">Progress: ';
-            const unlockedCount = trophySequence.filter(t => streak >= t.streak).length;
-            html += `${unlockedCount} of ${trophySequence.length} trophies unlocked</div></div>`;
-            
-            return html;
         }
 
         function continueLearning() {
@@ -598,7 +615,9 @@
 
         function showFinishScreen() {
             const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
+            const progressHTML = createProgressBar();
             const html = `
+                ${progressHTML}
                 <div class="finish-screen">
                     <h2>Quiz Complete!</h2>
                     <div class="score-display">${correct} / ${total}</div>
