@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IB SEHS MCQ Quiz</title>
+    <title>IB Sports MCQ Quiz</title>
     <style>
         :root {
             --color-primary: #004587;
@@ -243,6 +243,80 @@
             margin-top: var(--spacing-16);
         }
 
+        .progress-bar {
+            width: 100%;
+            margin: var(--spacing-24) 0;
+            padding: var(--spacing-16);
+            background: #F3F4F6;
+            border-radius: var(--radius-lg);
+        }
+
+        .progress-track {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: var(--spacing-8);
+            margin-bottom: var(--spacing-12);
+        }
+
+        .trophy-card {
+            aspect-ratio: 3/4;
+            border-radius: var(--radius-base);
+            border: 2px solid #E5E7EB;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trophy-card:hover:not(.locked) {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .trophy-card.unlocked {
+            background: linear-gradient(135deg, #fbba07 0%, #e73037 100%);
+            border-color: #004587;
+            box-shadow: 0 4px 12px rgba(0, 69, 135, 0.3);
+        }
+
+        .trophy-card.current {
+            border: 3px solid #004587;
+            box-shadow: 0 0 12px rgba(0, 69, 135, 0.6);
+        }
+
+        .trophy-card.locked {
+            background: #E5E7EB;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .trophy-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #1F2937;
+            text-align: center;
+            margin-top: var(--spacing-4);
+            position: absolute;
+            bottom: var(--spacing-4);
+            width: 100%;
+            padding: 0 2px;
+        }
+
+        .trophy-card.unlocked .trophy-label {
+            color: white;
+        }
+
+        .milestone-info {
+            font-size: 12px;
+            color: #6B7280;
+            text-align: center;
+        }
+
         .download-section h3 {
             margin: 0 0 var(--spacing-12) 0;
             color: #0369A1;
@@ -257,9 +331,9 @@
 
         .btn-download {
             padding: var(--spacing-10) var(--spacing-16);
-            background: #0EA5E9;
-            color: white;
-            border: none;
+            background: #fbba07;
+            color: #004587;
+            border: 2px solid #004587;
             border-radius: var(--radius-base);
             cursor: pointer;
             font-size: 14px;
@@ -270,7 +344,8 @@
         }
 
         .btn-download:hover {
-            background: #0284C7;
+            background: #e73037;
+            color: white;
         }
 
         .finish-screen {
@@ -313,7 +388,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>IB SEHS MCQ</h1>
+            <h1>IB Sports MCQ</h1>
             <div class="stats">
                 <div class="stat-item">
                     <div class="stat-label">Correct</div>
@@ -338,40 +413,10 @@
         </div>
     </div>
 
-    <script>
-        const allQuestions = [
-            { q: "Which defines diastolic blood pressure?", options: ["The force exerted on arterial walls during ventricular contraction", "The force exerted on arterial walls during ventricular relaxation", "The force exerted on venous walls during ventricular contraction", "The force exerted on venous walls during ventricular relaxation"], answer: 1 },
-            { q: "What is the function of glucagon during fasting?", options: ["It stimulates the storage of lipids", "It stimulates the storage of glucose", "It stimulates the breakdown of glycogen", "It stimulates the breakdown of insulin"], answer: 2 },
-            { q: "Which is a factor in delayed onset muscle soreness (DOMS)?", options: ["Lactic acid accumulation", "Concentric muscle contractions", "Inflammation of fibres", "Low-intensity exercises"], answer: 2 },
-            { q: "Which increases the rate of ventilation?", options: ["Decreasing the airflow through the nose, larynx, trachea and bronchi to the alveoli", "Increasing the pressure in the thoracic cavity during expiration", "Increasing blood oxygen concentration during exercise", "Decreasing pH levels in the blood"], answer: 3 },
-            { q: "During prolonged exercise, blood viscosity increases due to sweating, causing lower venous return and increased heart rate. What is this called?", options: ["Stroke volume response", "Cardiovascular drift", "Arterio-venous difference", "Maximal cardiac output"], answer: 1 },
-            { q: "Which statement applies to glycogen?", options: ["Broken down in catabolic reactions in response to insulin", "Stored in the liver and muscles in response to glucagon", "Synthesized in catabolic reactions from fatty acids and glycerol", "Broken down in slow twitch (type I) muscle fibres in response to adrenaline"], answer: 3 },
-            { q: "Which is the predominant energy system used when performing a high jump?", options: ["ATP-CP", "Lactic acid", "Aerobic glycolysis", "Aerobic lipolysis"], answer: 0 },
-            { q: "What is the definition of systolic blood pressure?", options: ["The force exerted by the blood on arterial walls during ventricular relaxation", "The force exerted by the blood on venous walls during ventricular contraction", "The force exerted by blood on arterial walls during ventricular contraction", "The force exerted by blood on venous walls during ventricular relaxation"], answer: 2 },
-            { q: "What factor causes insulin levels in the blood to increase?", options: ["Low levels of blood glucose", "Low levels of glycogen in the liver", "High levels of glycogen in the liver", "High levels of blood glucose"], answer: 3 },
-            { q: "Which process occurs when blood glucose levels are decreased?", options: ["Glycolysis", "Lipolysis", "Glycogenolysis", "Glycogenesis"], answer: 2 },
-            { q: "The radius and ulna articulate at the radioulnar joint. What is this type of joint?", options: ["Saddle", "Pivot", "Condyloid", "Gliding"], answer: 1 },
-            { q: "What type of synovial joint is found at the base of the thumb?", options: ["Gliding", "Hinge", "Saddle", "Pivot"], answer: 2 },
-            { q: "Which is the location of a hinge joint?", options: ["The medial end of the clavicle", "The proximal end of the femur", "The anterior end of the ribs", "The distal end of the femur"], answer: 3 },
-            { q: "What is acceleration?", options: ["A change in velocity and direction", "A change in displacement", "A change in position from a starting point", "A change in linear momentum"], answer: 0 },
-            { q: "Which is an example of Newton's second law of motion?", options: ["A ball is stationary on a penalty spot before it is kicked", "A ball will travel faster if greater force is applied by a racquet", "A ball applies a backward force on a racquet when it is hit", "Once kicked, a ball's acceleration is affected by gravity"], answer: 1 },
-            { q: "Which represents the relationship between impulse, time and force?", options: ["Impulse is inversely proportional to time and proportional to force", "Impulse is proportional to time and inversely proportional to force", "Impulse is proportional to time and force", "Impulse is inversely proportional to time and force"], answer: 2 },
-            { q: "With sufficient fuel availability, what is the effect of muscle cell oxygen levels on fuel use to produce ATP?", options: ["Elevated oxygen will promote the use of carbohydrates and fatty acids", "Depressed oxygen will promote the use of carbohydrates and fatty acids", "Elevated oxygen will promote the use of proteins", "Depressed oxygen will do little to promote any specific fuel"], answer: 0 },
-            { q: "Which of these stimulates an increase in ventilation as exercise begins?", options: ["Decreasing blood pH levels", "Decreasing blood adrenaline levels", "Decreasing blood carbon dioxide levels", "Decreasing blood oxygen levels"], answer: 0 },
-            { q: "Maximal oxygen consumption represents the functional capacity of the oxygen transport system. Which person would likely have the highest VO₂ max?", options: ["Elite marathon runner", "Chess player", "Novice hiker", "Young weightlifter"], answer: 0 },
-            { q: "Which correctly characterizes the relationship between blood acidity levels and ventilation during a sub-maximal training session?", options: ["Blood acidity increases, pH decreases, ventilation increases", "Blood acidity decreases, pH increases, ventilation decreases", "Blood acidity stays low and normal, ventilation increases", "Blood acidity decreases, pH increases, ventilation stays the same"], answer: 0 },
-            { q: "Which is an example of the associative stage of learning?", options: ["A gymnast detects and self-corrects movements on a balance beam without external feedback", "A soccer player talks through the steps of a throw-in as they attempt the skill", "A tennis player detects movement of a serve and receives some feedback from a coach", "A basketball player consistently dribbles and evaluates the movement of opponents"], answer: 2 },
-            { q: "Which is a characteristic of traditional linear pedagogy?", options: ["Athlete-led learning", "Coach-led learning", "Process-orientated learning", "Coach-athlete collaborative learning"], answer: 1 },
-            { q: "Which is a feature of non-linear pedagogy?", options: ["Process-orientated learning", "Content-focused learning", "Coach-led learning", "Coach-orientated learning"], answer: 0 },
-            { q: "Which situation is an example of the psychological refractory period (PRP)?", options: ["A defender's reaction is delayed as a player steps to shoot and suddenly changes direction", "Selective attention overreaction causes a false start in a race", "Attention deficit leads to a delayed nerve transmission in a race", "Response time is improved as a player focuses on the ball and reacts quickly"], answer: 0 },
-            { q: "What type of skill transfer occurs when a volleyball player successfully performs tennis serves?", options: ["Skill to skill", "Practice to performance", "Stage to stage", "Whole-part-whole"], answer: 0 },
-            { q: "What type of skill transfer occurs when a soccer player performs kicking drills as part of their warm-up before a big match?", options: ["Principles to skill", "Skill to skill", "Practice to performance", "Abilities to skill"], answer: 2 },
-            { q: "Which transfer occurs when a left-handed tennis player learns to hit with their right hand?", options: ["Skill to skill", "Abilities to skill", "Stage to stage", "Bilateral"], answer: 3 },
-            { q: "What is the definition of fatigue?", options: ["A decline in arousal levels during performance", "A reversible, exercise-induced decline in performance", "A negative emotional state associated with performance", "A temporary depletion in energy sources during athletic performance"], answer: 1 },
-            { q: "Which metabolic process produces the greatest ATP yield?", options: ["ATP-CP system", "Anaerobic glycolysis", "Krebs cycle", "Electron transport chain"], answer: 3 },
-            { q: "A weightlifter stops training for three months due to injury, which results in muscle atrophy. Which principle of training describes this period of time?", options: ["Reversibility", "Progression", "Overload", "Variety"], answer: 0 }
-        ];
+    <!-- Load questions from external file -->
+    <script src="questions.js"></script>
 
+    <script>
         let currentQuestionIndex = 0;
         let shuffledQuestions = [];
         let correct = 0;
@@ -379,21 +424,20 @@
         let streak = 0;
         let answered = false;
         let selectedAnswer = -1;
-        const milestoneStreaks = [1, 3, 5, 7, 9, 12, 15, 20, 25, 30, 40, 50];
-        const downloadFolders = {
-            'Americas cup': 'Americas_cup.png',
-            'Calcutta Cup': 'Calcutta_Cup.png',
-            'Davis Cup': 'Davis_Cup.png',
-            'FIFA': 'FIFA.png',
-            'FIVB': 'FIVB.png',
-            'Larry O\'Brien': 'Larry_OBrien.png',
-            'Olympic gold': 'Olympic_gold.png',
-            'Ryder Cup': 'Ryder_Cup.png',
-            'Snooker': 'Snooker.png',
-            'The Ashes': 'The_Ashes.png',
-            'Venus Rosewater': 'Venus_Rosewater.png',
-            'Yellow jersey': 'Yellow_jersey.png'
-        };
+        const trophySequence = [
+            { streak: 1, name: 'Venus Rosewater', file: 'Venus_Rosewater.png', emoji: '🎾' },
+            { streak: 3, name: 'Olympic Gold', file: 'Olympic_gold.png', emoji: '🥇' },
+            { streak: 5, name: 'Yellow Jersey', file: 'Yellow_jersey.png', emoji: '🟨' },
+            { streak: 7, name: 'Ryder Cup', file: 'Ryder_Cup.png', emoji: '⛳' },
+            { streak: 9, name: 'FIFA World Cup', file: 'FIFA.png', emoji: '⚽' },
+            { streak: 12, name: 'Calcutta Cup', file: 'Calcutta_Cup.png', emoji: '🏉' },
+            { streak: 15, name: 'FIVB World', file: 'FIVB.png', emoji: '🏐' },
+            { streak: 20, name: 'Davis Cup', file: 'Davis_Cup.png', emoji: '🎾' },
+            { streak: 25, name: 'The Ashes', file: 'The_Ashes.png', emoji: '🏏' },
+            { streak: 30, name: 'Snooker', file: 'Snooker.png', emoji: '🎱' },
+            { streak: 40, name: 'Americas Cup', file: 'Americas_cup.png', emoji: '⛵' },
+            { streak: 50, name: 'Larry O\'Brien', file: 'Larry_OBrien.png', emoji: '🏀' }
+        ];
 
         function shuffleArray(array) {
             const arr = [...array];
@@ -487,6 +531,7 @@
         }
 
         function nextQuestion() {
+            const milestoneStreaks = [1, 3, 5, 7, 9, 12, 15, 20, 25, 30, 40, 50];
             if (milestoneStreaks.includes(streak)) {
                 showStreakMilestone();
             } else {
@@ -502,23 +547,22 @@
         }
 
         function showStreakMilestone() {
-            const trophies = Object.keys(downloadFolders);
-            let downloadHTML = '<div class="download-buttons">';
+            const currentTrophy = trophySequence.find(t => t.streak === streak);
+            // TODO: Replace 'yourusername' with your actual GitHub username
+            const downloadUrl = `https://github.com/yourusername/yourrepo/raw/main/Trophys/${currentTrophy.file}`;
             
-            trophies.forEach((trophy, idx) => {
-                const fileName = downloadFolders[trophy];
-                const downloadUrl = `https://github.com/yourusername/Trophys/raw/main/${fileName}`;
-                downloadHTML += `<a href="${downloadUrl}" class="btn-download" download>${trophy}</a>`;
-            });
-            downloadHTML += '</div>';
+            let downloadHTML = `<a href="${downloadUrl}" class="btn-download" download>⬇️ Download ${currentTrophy.name}</a>`;
+
+            const progressHTML = createProgressBar();
 
             const html = `
                 <div class="streak-milestone">
-                    <div class="milestone-icon">🏆</div>
+                    <div class="milestone-icon">${currentTrophy.emoji}</div>
                     <div class="milestone-text">Streak of ${streak}!</div>
-                    <p style="margin: 0; color: #1F2937; font-size: 14px;">You've achieved ${streak} correct answers in a row!</p>
+                    <p style="margin: 0; color: #1F2937; font-size: 14px;">You've unlocked: <strong>${currentTrophy.name}</strong></p>
+                    ${progressHTML}
                     <div class="download-section">
-                        <h3>🏆 Download Trophy Files</h3>
+                        <h3>🏆 Download Your Trophy</h3>
                         ${downloadHTML}
                     </div>
                     <button class="btn btn-primary" onclick="continueLearning()" style="width: 100%; margin-top: var(--spacing-16);">Continue Quiz</button>
@@ -527,9 +571,27 @@
             document.getElementById('quiz-content').innerHTML = html;
         }
 
+        function createProgressBar() {
+            let html = '<div class="progress-bar"><div class="progress-track">';
+            
+            trophySequence.forEach((trophy) => {
+                let cardClass = 'trophy-card locked';
+                
+                if (streak >= trophy.streak) {
+                    cardClass = streak === trophy.streak ? 'trophy-card unlocked current' : 'trophy-card unlocked';
+                }
+                
+                html += `<div class="${cardClass}" title="${trophy.streak} streak: ${trophy.name}">${trophy.emoji}<div class="trophy-label">${trophy.streak}</div></div>`;
+            });
+            
+            html += '</div><div class="milestone-info">Progress: ';
+            const unlockedCount = trophySequence.filter(t => streak >= t.streak).length;
+            html += `${unlockedCount} of ${trophySequence.length} trophies unlocked</div></div>`;
+            
+            return html;
+        }
+
         function continueLearning() {
-            streak = 0;
-            updateStats();
             currentQuestionIndex++;
             loadQuestion();
         }
