@@ -32,28 +32,6 @@
             padding: 30px;
             background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
             border-radius: 15px;
-            position: relative;
-        }
-
-        .download-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background: #fbba07;
-            color: #004587;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .download-btn:hover {
-            background: #e5a906;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(251, 186, 7, 0.4);
         }
 
         .trophy-grid {
@@ -82,9 +60,15 @@
             transform: translateY(-2px);
         }
 
+        .trophy-item.unlocked:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 6px 16px rgba(251, 186, 7, 0.5);
+        }
+
         .trophy-item.locked {
             opacity: 0.4;
             filter: grayscale(100%);
+            cursor: default;
         }
 
         .trophy-image {
@@ -317,19 +301,12 @@
             .question-text {
                 font-size: 18px;
             }
-
-            .download-btn {
-                position: static;
-                margin-bottom: 20px;
-                width: 100%;
-            }
         }
     </style>
 </head>
 <body>
     <div class="quiz-container">
         <div class="trophy-section">
-            <button class="download-btn" id="downloadBtn" onclick="downloadTrophies()">📥 Download Progress</button>
             <h2 style="text-align: center; color: #004587; margin-bottom: 10px;">🏆 Trophy Collection</h2>
             <div class="trophy-grid" id="trophyGrid"></div>
             <p class="progress-text" id="progressText">Progress: 0 of 12 trophies unlocked</p>
@@ -368,9 +345,6 @@
     
     <!-- Then quiz logic -->
     <script>
-        // Base URL for GitHub Pages
-        const baseUrl = 'https://jamier7.github.io/trophy/';
-        
         const trophies = [
             { milestone: 1, image: "Trophys/FIFA.png", name: "FIFA World Cup" },
             { milestone: 3, image: "Trophys/Calcutta%20Cup.png", name: "Calcutta Cup" },
@@ -406,6 +380,12 @@
             loadQuestion();
         }
 
+        function openTrophy(imagePath, isUnlocked) {
+            if (isUnlocked) {
+                window.open(imagePath, '_blank');
+            }
+        }
+
         function displayTrophies() {
             const trophyGrid = document.getElementById('trophyGrid');
             trophyGrid.innerHTML = '';
@@ -414,7 +394,8 @@
                 const isUnlocked = score >= trophy.milestone;
                 const trophyItem = document.createElement('div');
                 trophyItem.className = `trophy-item ${isUnlocked ? 'unlocked' : 'locked'}`;
-                trophyItem.title = trophy.name;
+                trophyItem.title = isUnlocked ? `Click to view ${trophy.name}` : `🔒 ${trophy.name} (Need ${trophy.milestone - score} more)`;
+                trophyItem.onclick = () => openTrophy(trophy.image, isUnlocked);
                 trophyItem.innerHTML = `
                     <img src="${trophy.image}" alt="${trophy.name}" class="trophy-image">
                     <div class="trophy-number">${trophy.milestone}</div>
@@ -425,46 +406,6 @@
             const unlockedCount = trophies.filter(t => score >= t.milestone).length;
             document.getElementById('progressText').textContent = 
                 `Progress: ${unlockedCount} of ${trophies.length} trophies unlocked`;
-        }
-
-        function downloadTrophies() {
-            const unlockedTrophies = trophies.filter(t => score >= t.milestone);
-            const lockedTrophies = trophies.filter(t => score < t.milestone);
-            
-            let content = "🏆 MY IB SPORTS SCIENCE TROPHY COLLECTION 🏆\n";
-            content += "=" .repeat(50) + "\n\n";
-            content += `Current Score: ${score}/40\n`;
-            content += `Trophies Unlocked: ${unlockedTrophies.length}/${trophies.length}\n\n`;
-            
-            content += "✅ UNLOCKED TROPHIES:\n";
-            content += "-".repeat(50) + "\n";
-            if (unlockedTrophies.length > 0) {
-                unlockedTrophies.forEach(trophy => {
-                    content += `🏆 ${trophy.name} (${trophy.milestone} correct answers)\n`;
-                });
-            } else {
-                content += "None yet - keep practicing!\n";
-            }
-            
-            content += "\n🔒 LOCKED TROPHIES:\n";
-            content += "-".repeat(50) + "\n";
-            lockedTrophies.forEach(trophy => {
-                const needed = trophy.milestone - score;
-                content += `🔒 ${trophy.name} (Need ${needed} more correct answer${needed === 1 ? '' : 's'})\n`;
-            });
-            
-            content += "\n" + "=".repeat(50) + "\n";
-            content += `Generated: ${new Date().toLocaleString()}\n`;
-            
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `IB_Sports_Science_Trophies_${score}_points.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
         }
 
         function loadQuestion() {
