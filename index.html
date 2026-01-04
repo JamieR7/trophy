@@ -91,6 +91,24 @@
             font-weight: 500;
         }
 
+        .streak-display {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 20px;
+            color: #fbba07;
+            font-weight: 700;
+        }
+
+        .streak-reset {
+            animation: shakeRed 0.5s ease;
+        }
+
+        @keyframes shakeRed {
+            0%, 100% { transform: translateX(0); color: #e73037; }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
         h1 {
             text-align: center;
             color: #004587;
@@ -308,12 +326,13 @@
     <div class="quiz-container">
         <div class="trophy-section">
             <h2 style="text-align: center; color: #004587; margin-bottom: 10px;">🏆 Trophy Collection</h2>
+            <div class="streak-display" id="streakDisplay">🔥 Current Streak: 0</div>
             <div class="trophy-grid" id="trophyGrid"></div>
             <p class="progress-text" id="progressText">Progress: 0 of 12 trophies unlocked</p>
         </div>
 
         <h1>IB Sports Science Quiz</h1>
-        <p class="subtitle">Test your knowledge with real IB exam questions</p>
+        <p class="subtitle">Test your knowledge with real IB exam questions - Keep your streak alive!</p>
         
         <div id="quizArea">
             <div class="question-box">
@@ -362,6 +381,8 @@
 
         let currentQuestion = 0;
         let score = 0;
+        let streak = 0;
+        let maxStreak = 0;
         let selectedAnswer = null;
         let quizQuestions = [];
 
@@ -386,15 +407,21 @@
             }
         }
 
+        function updateStreakDisplay() {
+            const streakDisplay = document.getElementById('streakDisplay');
+            streakDisplay.textContent = `🔥 Current Streak: ${streak}`;
+            streakDisplay.classList.remove('streak-reset');
+        }
+
         function displayTrophies() {
             const trophyGrid = document.getElementById('trophyGrid');
             trophyGrid.innerHTML = '';
             
             trophies.forEach(trophy => {
-                const isUnlocked = score >= trophy.milestone;
+                const isUnlocked = streak >= trophy.milestone;
                 const trophyItem = document.createElement('div');
                 trophyItem.className = `trophy-item ${isUnlocked ? 'unlocked' : 'locked'}`;
-                trophyItem.title = isUnlocked ? `Click to view ${trophy.name}` : `🔒 ${trophy.name} (Need ${trophy.milestone - score} more)`;
+                trophyItem.title = isUnlocked ? `Click to view ${trophy.name}` : `🔒 ${trophy.name} (Need ${trophy.milestone} streak)`;
                 trophyItem.onclick = () => openTrophy(trophy.image, isUnlocked);
                 trophyItem.innerHTML = `
                     <img src="${trophy.image}" alt="${trophy.name}" class="trophy-image">
@@ -403,7 +430,7 @@
                 trophyGrid.appendChild(trophyItem);
             });
             
-            const unlockedCount = trophies.filter(t => score >= t.milestone).length;
+            const unlockedCount = trophies.filter(t => streak >= t.milestone).length;
             document.getElementById('progressText').textContent = 
                 `Progress: ${unlockedCount} of ${trophies.length} trophies unlocked`;
         }
@@ -449,12 +476,21 @@
             if (index === question.correct) {
                 options[index].classList.add('correct');
                 score++;
+                streak++;
+                if (streak > maxStreak) maxStreak = streak;
                 showFeedback(true);
+                updateStreakDisplay();
                 displayTrophies();
             } else {
                 options[index].classList.add('incorrect');
                 options[question.correct].classList.add('correct');
+                streak = 0;
                 showFeedback(false);
+                const streakDisplay = document.getElementById('streakDisplay');
+                streakDisplay.textContent = '💔 Streak Reset to 0!';
+                streakDisplay.classList.add('streak-reset');
+                displayTrophies();
+                setTimeout(updateStreakDisplay, 2000);
             }
             
             currentQuestion++;
@@ -478,7 +514,7 @@
             const finalMessage = document.getElementById('finalMessage');
             const finalTrophy = document.getElementById('finalTrophy');
             
-            finalScore.textContent = `${score}/${quizQuestions.length} (${percentage.toFixed(1)}%)`;
+            finalScore.innerHTML = `${score}/${quizQuestions.length} (${percentage.toFixed(1)}%)<br><small style="font-size: 24px;">Max Streak: ${maxStreak}</small>`;
             
             if (percentage >= 90) {
                 finalMessage.textContent = 'Outstanding! IB Level 7! 🌟';
