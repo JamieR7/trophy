@@ -266,11 +266,13 @@
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 28px;
             position: relative;
             overflow: hidden;
+            padding: var(--spacing-8);
         }
 
         .trophy-card:hover:not(.locked) {
@@ -295,20 +297,24 @@
             opacity: 0.5;
         }
 
+        .trophy-emoji {
+            font-size: 28px;
+            margin-bottom: var(--spacing-8);
+        }
+
         .trophy-label {
-            font-size: 10px;
-            font-weight: 600;
+            font-size: 11px;
+            font-weight: 700;
             color: #1F2937;
             text-align: center;
-            margin-top: var(--spacing-4);
-            position: absolute;
-            bottom: var(--spacing-4);
-            width: 100%;
-            padding: 0 2px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 6px;
+            border-radius: 4px;
         }
 
         .trophy-card.unlocked .trophy-label {
-            color: white;
+            background: rgba(255, 255, 255, 0.95);
+            color: #004587;
         }
 
         .milestone-info {
@@ -437,14 +443,14 @@
             { streak: 3, name: 'Calcutta Cup', file: 'Calcutta_Cup.png', emoji: '🏉' },
             { streak: 5, name: 'FIVB World', file: 'FIVB.png', emoji: '🏐' },
             { streak: 7, name: 'The Ashes', file: 'The_Ashes.png', emoji: '🏏' },
-            { streak: 9, name: 'Snooker', file: 'Snooker.png', emoji: '🎱' },
-            { streak: 12, name: 'Americas Cup', file: 'Americas_cup.png', emoji: '⛵' },
-            { streak: 15, name: 'Larry O\'Brien', file: 'Larry_OBrien.png', emoji: '🏀' },
-            { streak: 20, name: 'Davis Cup', file: 'Davis_Cup.png', emoji: '🎾' },
+            { streak: 10, name: 'Snooker', file: 'Snooker.png', emoji: '🎱' },
+            { streak: 13, name: 'Americas Cup', file: 'Americas_cup.png', emoji: '⛵' },
+            { streak: 17, name: 'Larry O\'Brien', file: 'Larry_OBrien.png', emoji: '🏀' },
+            { streak: 21, name: 'Davis Cup', file: 'Davis_Cup.png', emoji: '🎾' },
             { streak: 25, name: 'Ryder Cup', file: 'Ryder_Cup.png', emoji: '⛳' },
             { streak: 30, name: 'Venus Rosewater', file: 'Venus_Rosewater.png', emoji: '🎾' },
-            { streak: 40, name: 'Olympic Gold', file: 'Olympic_gold.png', emoji: '🥇' },
-            { streak: 50, name: 'Yellow Jersey', file: 'Yellow_jersey.png', emoji: '🚴' }
+            { streak: 35, name: 'Olympic Gold', file: 'Olympic_gold.png', emoji: '🥇' },
+            { streak: 40, name: 'Yellow Jersey', file: 'Yellow_jersey.png', emoji: '🚴' }
         ];
 
         function shuffleArray(array) {
@@ -476,7 +482,10 @@
                     cardClass = 'trophy-card unlocked';
                 }
                 
-                html += `<div class="${cardClass}" title="${trophy.name}">${trophy.emoji}<div class="trophy-label">${trophy.streak}</div></div>`;
+                html += `<div class="${cardClass}" title="${trophy.name}">
+                    <div class="trophy-emoji">${trophy.emoji}</div>
+                    <div class="trophy-label">${trophy.streak}</div>
+                </div>`;
             });
             
             html += '</div><div class="milestone-info">Progress: ';
@@ -566,7 +575,7 @@
         }
 
         function nextQuestion() {
-            const milestoneStreaks = [1, 3, 5, 7, 9, 12, 15, 20, 25, 30, 40, 50];
+            const milestoneStreaks = [1, 3, 5, 7, 10, 13, 17, 21, 25, 30, 35, 40];
             if (milestoneStreaks.includes(streak)) {
                 showStreakMilestone();
             } else {
@@ -585,7 +594,7 @@
             const currentTrophy = trophySequence.find(t => t.streak === streak);
             const downloadUrl = `https://github.com/${GITHUB_USERNAME}/${GITHUB_REPO}/raw/main/Trophys/${currentTrophy.file}`;
             
-            let downloadHTML = `<a href="${downloadUrl}" class="btn-download" download="${currentTrophy.file}">⬇️ Download ${currentTrophy.name}</a>`;
+            let downloadHTML = `<a href="${downloadUrl}" class="btn-download" download="${currentTrophy.file}" target="_blank">⬇️ Download ${currentTrophy.name}</a>`;
 
             const progressHTML = createProgressBar();
 
