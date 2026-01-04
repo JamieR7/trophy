@@ -1200,16 +1200,7 @@ const allQuestions = [
             "Competence"
         ],
         correct: 0
-    },
-    {
-        q: "What type of learning is occurring during a plateau on a learning curve?",
-        options: [
-            "Plateau",
-            "Linear",
-            "Positive acceleration",
-            "Negative acceleration"
-        ],
-        correct: 0
+  
     },
 
     // ========== TOPIC C: SKILL ACQUISITION - PEDAGOGY & CONSTRAINTS ==========
