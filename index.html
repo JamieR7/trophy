@@ -34,6 +34,49 @@
             border-radius: 15px;
         }
 
+        .streak-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+
+        .streak-item {
+            text-align: center;
+        }
+
+        .streak-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .streak-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #004587;
+        }
+
+        .streak-value.current {
+            color: #fbba07;
+        }
+
+        .streak-value.best {
+            color: #004587;
+        }
+
+        .streak-reset {
+            animation: shakeRed 0.5s ease;
+        }
+
+        @keyframes shakeRed {
+            0%, 100% { transform: translateX(0); color: #e73037; }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
         .trophy-grid {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
@@ -89,24 +132,6 @@
             font-size: 18px;
             color: #004587;
             font-weight: 500;
-        }
-
-        .streak-display {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 20px;
-            color: #fbba07;
-            font-weight: 700;
-        }
-
-        .streak-reset {
-            animation: shakeRed 0.5s ease;
-        }
-
-        @keyframes shakeRed {
-            0%, 100% { transform: translateX(0); color: #e73037; }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
         }
 
         h1 {
@@ -297,6 +322,14 @@
             .quiz-container {
                 padding: 25px;
             }
+
+            .streak-container {
+                gap: 20px;
+            }
+
+            .streak-value {
+                font-size: 24px;
+            }
             
             .trophy-grid {
                 grid-template-columns: repeat(4, 1fr);
@@ -325,8 +358,19 @@
 <body>
     <div class="quiz-container">
         <div class="trophy-section">
-            <h2 style="text-align: center; color: #004587; margin-bottom: 10px;">🏆 Trophy Collection</h2>
-            <div class="streak-display" id="streakDisplay">🔥 Current Streak: 0</div>
+            <h2 style="text-align: center; color: #004587; margin-bottom: 20px;">🏆 Trophy Collection</h2>
+            
+            <div class="streak-container">
+                <div class="streak-item">
+                    <div class="streak-label">Current Streak</div>
+                    <div class="streak-value current" id="currentStreak">0</div>
+                </div>
+                <div class="streak-item">
+                    <div class="streak-label">Best Streak</div>
+                    <div class="streak-value best" id="bestStreak">0</div>
+                </div>
+            </div>
+
             <div class="trophy-grid" id="trophyGrid"></div>
             <p class="progress-text" id="progressText">Progress: 0 of 12 trophies unlocked</p>
         </div>
@@ -381,8 +425,8 @@
 
         let currentQuestion = 0;
         let score = 0;
-        let streak = 0;
-        let maxStreak = 0;
+        let currentStreak = 0;
+        let bestStreak = 0;
         let selectedAnswer = null;
         let quizQuestions = [];
 
@@ -408,9 +452,13 @@
         }
 
         function updateStreakDisplay() {
-            const streakDisplay = document.getElementById('streakDisplay');
-            streakDisplay.textContent = `🔥 Current Streak: ${streak}`;
-            streakDisplay.classList.remove('streak-reset');
+            const currentStreakEl = document.getElementById('currentStreak');
+            const bestStreakEl = document.getElementById('bestStreak');
+            
+            currentStreakEl.textContent = currentStreak;
+            bestStreakEl.textContent = bestStreak;
+            
+            currentStreakEl.classList.remove('streak-reset');
         }
 
         function displayTrophies() {
@@ -418,7 +466,7 @@
             trophyGrid.innerHTML = '';
             
             trophies.forEach(trophy => {
-                const isUnlocked = streak >= trophy.milestone;
+                const isUnlocked = bestStreak >= trophy.milestone;
                 const trophyItem = document.createElement('div');
                 trophyItem.className = `trophy-item ${isUnlocked ? 'unlocked' : 'locked'}`;
                 trophyItem.title = isUnlocked ? `Click to view ${trophy.name}` : `🔒 ${trophy.name} (Need ${trophy.milestone} streak)`;
@@ -430,7 +478,7 @@
                 trophyGrid.appendChild(trophyItem);
             });
             
-            const unlockedCount = trophies.filter(t => streak >= t.milestone).length;
+            const unlockedCount = trophies.filter(t => bestStreak >= t.milestone).length;
             document.getElementById('progressText').textContent = 
                 `Progress: ${unlockedCount} of ${trophies.length} trophies unlocked`;
         }
@@ -476,21 +524,22 @@
             if (index === question.correct) {
                 options[index].classList.add('correct');
                 score++;
-                streak++;
-                if (streak > maxStreak) maxStreak = streak;
+                currentStreak++;
+                if (currentStreak > bestStreak) {
+                    bestStreak = currentStreak;
+                }
                 showFeedback(true);
                 updateStreakDisplay();
                 displayTrophies();
             } else {
                 options[index].classList.add('incorrect');
                 options[question.correct].classList.add('correct');
-                streak = 0;
+                currentStreak = 0;
                 showFeedback(false);
-                const streakDisplay = document.getElementById('streakDisplay');
-                streakDisplay.textContent = '💔 Streak Reset to 0!';
-                streakDisplay.classList.add('streak-reset');
+                const currentStreakEl = document.getElementById('currentStreak');
+                currentStreakEl.classList.add('streak-reset');
+                updateStreakDisplay();
                 displayTrophies();
-                setTimeout(updateStreakDisplay, 2000);
             }
             
             currentQuestion++;
@@ -502,7 +551,7 @@
             const feedback = document.getElementById('feedback');
             feedback.style.display = 'block';
             feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
-            feedback.textContent = isCorrect ? '✓ Correct!' : '✗ Incorrect';
+            feedback.textContent = isCorrect ? '✓ Correct! Streak +1' : '✗ Incorrect - Streak Reset!';
         }
 
         function showResults() {
@@ -514,7 +563,7 @@
             const finalMessage = document.getElementById('finalMessage');
             const finalTrophy = document.getElementById('finalTrophy');
             
-            finalScore.innerHTML = `${score}/${quizQuestions.length} (${percentage.toFixed(1)}%)<br><small style="font-size: 24px;">Max Streak: ${maxStreak}</small>`;
+            finalScore.innerHTML = `${score}/${quizQuestions.length} (${percentage.toFixed(1)}%)<br><small style="font-size: 24px;">Best Streak: ${bestStreak}</small>`;
             
             if (percentage >= 90) {
                 finalMessage.textContent = 'Outstanding! IB Level 7! 🌟';
