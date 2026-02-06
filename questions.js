@@ -627,7 +627,7 @@ const allQuestions = [
         correct: 1
     },
     {
-        q: "What type of movement is illustrated by pointing toes away from the body?",
+        q: "What type of movement is it when the sole of the foot is turned inwards toward the midline?",
         options: [
             "Eversion",
             "Flexion",
